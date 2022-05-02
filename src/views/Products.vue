@@ -1,6 +1,6 @@
 <template>
   <div class="text-end">
-    <button class="btn btn-primary" type="button" @click="openModal">新增產品</button>
+    <button class="btn btn-primary" type="button" @click="openModal(true)">新增產品</button>
   </div>
   <table class="table mt-4">
     <thead>
@@ -25,7 +25,9 @@
         </td>
         <td>
           <div class="btn-group">
-            <button class="btn btn-outline-primary btn-sm">編輯</button>
+            <button class="btn btn-outline-primary btn-sm" @click="openModal(false, item)">
+              編輯
+            </button>
             <button class="btn btn-outline-danger btn-sm">刪除</button>
           </div>
         </td>
@@ -48,6 +50,7 @@ export default {
       products: [],
       pagination: {},
       tempProuct: {},
+      isNew: false,
     };
   },
   components: {
@@ -64,22 +67,33 @@ export default {
         }
       });
     },
-    openModal() {
-      this.tempProuct = {};
+    openModal(isNew, item) {
+      if (isNew) {
+        this.tempProuct = {};
+      } else {
+        this.tempProuct = { ...item };
+      }
+      this.isNew = isNew;
       const productComponent = this.$refs.productModal;
       productComponent.showModal();
     },
     updateProduct(item) {
-      console.log(item);
-      //   this.tempProuct = item;
-      //   const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
-      //   const productComponent = this.$refs.productModal;
-      //   this.$http.post(api, { data: this.tempProuct }).then(({ data }) => {
-      //     if (data.success) {
-      //       productComponent.hideModal();
-      //       this.getProducts();
-      //     }
-      //   });
+      this.tempProuct = item;
+      // 新增
+      let api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+      let httpMethod = 'post';
+      // 修改
+      if (!this.isNew) {
+        api += `/${item.id}`;
+        httpMethod = 'put';
+      }
+      const productComponent = this.$refs.productModal;
+      this.$http[httpMethod](api, { data: this.tempProuct }).then(({ data }) => {
+        if (data.success) {
+          productComponent.hideModal();
+          this.getProducts();
+        }
+      });
     },
   },
   created() {
