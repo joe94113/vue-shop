@@ -1,4 +1,7 @@
 <template>
+  <div class="text-end">
+    <button class="btn btn-primary" type="button" @click="openModal">新增產品</button>
+  </div>
   <table class="table mt-4">
     <thead>
       <tr>
@@ -29,15 +32,26 @@
       </tr>
     </tbody>
   </table>
+  <ProductModal
+    ref="productModal"
+    :product="tempProuct"
+    @update-product="updateProduct"
+  ></ProductModal>
 </template>
 
 <script>
+import ProductModal from '../components/ProductModal.vue';
+
 export default {
   data() {
     return {
       products: [],
       pagination: {},
+      tempProuct: {},
     };
+  },
+  components: {
+    ProductModal,
   },
   methods: {
     getProducts() {
@@ -49,6 +63,23 @@ export default {
           console.log(data);
         }
       });
+    },
+    openModal() {
+      this.tempProuct = {};
+      const productComponent = this.$refs.productModal;
+      productComponent.showModal();
+    },
+    updateProduct(item) {
+      console.log(item);
+      //   this.tempProuct = item;
+      //   const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+      //   const productComponent = this.$refs.productModal;
+      //   this.$http.post(api, { data: this.tempProuct }).then(({ data }) => {
+      //     if (data.success) {
+      //       productComponent.hideModal();
+      //       this.getProducts();
+      //     }
+      //   });
     },
   },
   created() {
