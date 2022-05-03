@@ -27,14 +27,26 @@
             <div class="col-sm-4">
               <div class="mb-3">
                 <label for="image" class="form-label">輸入圖片網址</label>
-                <input type="text" class="form-control" id="image" placeholder="請輸入圖片連結" />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="image"
+                  placeholder="請輸入圖片連結"
+                  v-model="tempProduct.imageUrl"
+                />
               </div>
               <div class="mb-3">
                 <label for="customFile" class="form-label"
                   >或 上傳圖片
                   <i class="fas fa-spinner fa-spin"></i>
                 </label>
-                <input type="file" id="customFile" class="form-control" />
+                <input
+                  type="file"
+                  id="customFile"
+                  class="form-control"
+                  ref="fileInput"
+                  @change="uploadFile"
+                />
               </div>
               <img class="img-fluid" alt="" />
               <!-- 延伸技巧，多圖 -->
@@ -174,6 +186,10 @@ export default {
     product: {
       handler() {
         this.tempProduct = this.product;
+        // 多圖範例
+        if (!this.tempProduct.images) {
+          this.tempProduct.images = [];
+        }
       },
       deep: true,
     },
@@ -190,6 +206,18 @@ export default {
     },
     hideModal() {
       this.modal.hide();
+    },
+    uploadFile() {
+      const uploadedFile = this.$refs.fileInput.files[0];
+      const formData = new FormData();
+      formData.append('file-to-upload', uploadedFile);
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
+      this.$http.post(url, formData).then((response) => {
+        console.log(response.data);
+        if (response.data.success) {
+          this.tempProduct.imageUrl = response.data.imageUrl;
+        }
+      });
     },
   },
   mounted() {
