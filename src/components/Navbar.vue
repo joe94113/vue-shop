@@ -1,4 +1,5 @@
 <template>
+  <loading v-model:active="isLoading" :can-cancel="true" />
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar w/ text</a>
@@ -33,13 +34,20 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
   methods: {
     logout() {
       const api = `${process.env.VUE_APP_API}logout`;
+      this.isLoading = true;
       this.$http
         .post(api, this.user)
         .then(({ data }) => {
           // tvVqbz2sDrbqv
+          this.isLoading = false;
           if (data.success) {
             console.log(data);
             this.$router.push('/login');

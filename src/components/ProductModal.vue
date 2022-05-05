@@ -9,6 +9,7 @@
     aria-hidden="true"
     ref="modal"
   >
+    <loading v-model:active="isLoading" :can-cancel="true" />
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content border-0">
         <div class="modal-header bg-dark text-white">
@@ -198,6 +199,7 @@ export default {
     return {
       modal: {},
       tempProduct: {},
+      isLoading: false,
     };
   },
   methods: {
@@ -206,8 +208,10 @@ export default {
       const formData = new FormData();
       formData.append('file-to-upload', uploadedFile);
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
+      this.isLoading = true;
       this.$http.post(url, formData).then((response) => {
-        console.log(response.data);
+        this.isLoading = false;
+        // console.log(response.data);
         if (response.data.success) {
           this.tempProduct.imageUrl = response.data.imageUrl;
         }

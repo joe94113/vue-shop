@@ -1,4 +1,5 @@
 <template>
+  <loading v-model:active="isLoading" :can-cancel="true" />
   <div class="container mt-5">
     <form class="row justify-content-center" @submit.prevent="signIn">
       <div class="col-md-6">
@@ -42,15 +43,18 @@ export default {
         username: '',
         password: '',
       },
+      isLoading: false,
     };
   },
   methods: {
     signIn() {
       const api = `${process.env.VUE_APP_API}admin/signin`;
+      this.isLoading = true;
       this.$http
         .post(api, this.user)
         .then(({ data }) => {
           // tvVqbz2sDrbqv
+          this.isLoading = false;
           if (data.success) {
             const { token, expired } = data;
             document.cookie = `token=${token}; expires=${expired}`;

@@ -1,4 +1,5 @@
 <template>
+  <loading v-model:active="isLoading" :can-cancel="true" />
   <div class="text-end">
     <button class="btn btn-primary" type="button" @click="openModal(true)">新增產品</button>
   </div>
@@ -55,6 +56,7 @@ export default {
       pagination: {},
       tempProduct: {},
       isNew: false,
+      isLoading: false,
     };
   },
   components: {
@@ -64,13 +66,20 @@ export default {
   methods: {
     getProducts() {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products`;
-      this.$http.get(api).then(({ data }) => {
-        if (data.success) {
-          this.products = data.products;
-          this.pagination = data.pagination;
-          console.log(data);
-        }
-      });
+      this.isLoading = true;
+      this.$http
+        .get(api)
+        .then(({ data }) => {
+          this.isLoading = false;
+          if (data.success) {
+            this.products = data.products;
+            this.pagination = data.pagination;
+            console.log(data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     openModal(isNew, item) {
       if (isNew) {
@@ -90,12 +99,19 @@ export default {
     },
     delProduct() {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
-      this.$http.delete(url).then((response) => {
-        console.log(response.data);
-        const delComponent = this.$refs.delModal;
-        delComponent.hideModal();
-        this.getProducts();
-      });
+      this.isLoading = true;
+      this.$http
+        .delete(url)
+        .then(({ data }) => {
+          const delComponent = this.$refs.delModal;
+          delComponent.hideModal();
+          this.getProducts();
+          this.isLoading = false;
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     updateProduct(item) {
       this.tempProduct = item;
@@ -108,12 +124,18 @@ export default {
         httpMethod = 'put';
       }
       const productComponent = this.$refs.productModal;
-      this.$http[httpMethod](api, { data: this.tempProduct }).then(({ data }) => {
-        if (data.success) {
-          productComponent.hideModal();
-          this.getProducts();
-        }
-      });
+      this.isLoading = true;
+      this.$http[httpMethod](api, { data: this.tempProduct })
+        .then(({ data }) => {
+          this.isLoading = false;
+          if (data.success) {
+            productComponent.hideModal();
+            this.getProducts();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   created() {
