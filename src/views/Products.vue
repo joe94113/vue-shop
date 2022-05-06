@@ -63,6 +63,7 @@ export default {
     ProductModal,
     DelModal,
   },
+  inject: ['emitter'],
   methods: {
     getProducts() {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products`;
@@ -74,7 +75,7 @@ export default {
           if (data.success) {
             this.products = data.products;
             this.pagination = data.pagination;
-            console.log(data);
+            // console.log(data);
           }
         })
         .catch((err) => {
@@ -107,7 +108,11 @@ export default {
           delComponent.hideModal();
           this.getProducts();
           this.isLoading = false;
-          console.log(data);
+          this.emitter.emit('push-message', {
+            style: 'success',
+            title: data.message,
+          });
+          // console.log(data);
         })
         .catch((err) => {
           console.log(err);
@@ -128,9 +133,19 @@ export default {
       this.$http[httpMethod](api, { data: this.tempProduct })
         .then(({ data }) => {
           this.isLoading = false;
+          productComponent.hideModal();
           if (data.success) {
-            productComponent.hideModal();
             this.getProducts();
+            this.emitter.emit('push-message', {
+              style: 'success',
+              title: '更新成功',
+            });
+          } else {
+            this.emitter.emit('push-message', {
+              style: 'danger',
+              title: '更新失敗',
+              content: data.message.join('，'),
+            });
           }
         })
         .catch((err) => {
