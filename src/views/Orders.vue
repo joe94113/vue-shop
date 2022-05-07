@@ -1,7 +1,7 @@
 <template>
   <Loading :active="isLoading"></Loading>
   <h2>訂單管理</h2>
-  <table class="table mt-4">
+  <table class="table mt-4 table-hover">
     <thead>
       <tr>
         <th>購買時間</th>

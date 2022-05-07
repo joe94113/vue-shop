@@ -4,7 +4,7 @@
   <div class="text-end">
     <button class="btn btn-primary" type="button" @click="openModal(true)">新增產品</button>
   </div>
-  <table class="table mt-4">
+  <table class="table mt-4 table-hover">
     <thead>
       <tr>
         <th width="120">分類</th>
