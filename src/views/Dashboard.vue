@@ -25,7 +25,7 @@ export default {
     this.$http
       .post(api, this.user)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         if (!data.success) {
           this.$router.push('/login');
         }

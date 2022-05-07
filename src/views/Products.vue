@@ -1,5 +1,6 @@
 <template>
   <loading v-model:active="isLoading" :can-cancel="true" />
+  <h2>產品管理</h2>
   <div class="text-end">
     <button class="btn btn-primary" type="button" @click="openModal(true)">新增產品</button>
   </div>
@@ -70,7 +71,7 @@ export default {
     DelModal,
     Pagination,
   },
-  inject: ['emitter'],
+  inject: ['httpMessageState'],
   methods: {
     getProducts(page = 1) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products/?page=${page}`;
@@ -82,7 +83,7 @@ export default {
           if (data.success) {
             this.products = data.products;
             this.pagination = data.pagination;
-            console.log(this.pagination);
+            // console.log(this.pagination);
             // console.log(data);
           }
         })
@@ -111,15 +112,12 @@ export default {
       this.isLoading = true;
       this.$http
         .delete(url)
-        .then(({ data }) => {
+        .then((response) => {
           const delComponent = this.$refs.delModal;
           delComponent.hideModal();
           this.getProducts();
           this.isLoading = false;
-          this.emitter.emit('push-message', {
-            style: 'success',
-            title: data.message,
-          });
+          this.httpMessageState(response, '刪除成功');
           // console.log(data);
         })
         .catch((err) => {
@@ -139,22 +137,11 @@ export default {
       const productComponent = this.$refs.productModal;
       this.isLoading = true;
       this.$http[httpMethod](api, { data: this.tempProduct })
-        .then(({ data }) => {
+        .then((response) => {
           this.isLoading = false;
           productComponent.hideModal();
-          if (data.success) {
-            this.getProducts();
-            this.emitter.emit('push-message', {
-              style: 'success',
-              title: '更新成功',
-            });
-          } else {
-            this.emitter.emit('push-message', {
-              style: 'danger',
-              title: '更新失敗',
-              content: data.message.join('，'),
-            });
-          }
+          this.getProducts();
+          this.httpMessageState(response);
         })
         .catch((err) => {
           console.log(err);

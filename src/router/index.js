@@ -17,15 +17,19 @@ const routes = [
   },
   {
     path: '/login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
   },
   {
     path: '/dashboard',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
     children: [
       {
         path: 'products',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Products.vue'),
+        component: () => import(/* webpackChunkName: "products" */ '../views/Products.vue'),
+      },
+      {
+        path: 'orders',
+        component: () => import(/* webpackChunkName: "orders" */ '../views/Orders.vue'),
       },
     ],
   },
