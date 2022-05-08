@@ -37,6 +37,20 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/user',
+    component: () => import(/* webpackChunkName: "user" */ '../views/Userboard.vue'),
+    children: [
+      {
+        path: 'cart',
+        component: () => import(/* webpackChunkName: "cart" */ '../views/UserCart.vue'),
+      },
+      {
+        path: 'product/:productId',
+        component: () => import(/* webpackChunkName: "product" */ '../views/UserProduct.vue'),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
