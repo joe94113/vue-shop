@@ -5,22 +5,37 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
 import Toast from '@/components/Toast.vue';
+import statusStore from '@/stores/statusStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   components: { Toast },
-  data() {
-    return {
-      messages: [],
-    };
-  },
-  inject: ['emitter'],
-  mounted() {
-    this.emitter.on('push-message', (message) => {
-      const { style = 'success', title, content } = message;
-      console.log(content);
-      this.messages.push({ style, title, content });
+  setup() {
+    const status = statusStore();
+    const { messages } = storeToRefs(status);
+
+    const router = useRouter();
+
+    router.beforeEach(() => {
+      status.$reset();
     });
+
+    return { messages };
   },
+  // data() {
+  //   return {
+  //     messages: [],
+  //   };
+  // },
+  // inject: ['emitter'],
+  // mounted() {
+  //   this.emitter.on('push-message', (message) => {
+  //     const { style = 'success', title, content } = message;
+  //     console.log(content);
+  //     this.messages.push({ style, title, content });
+  //   });
+  // },
 };
 </script>

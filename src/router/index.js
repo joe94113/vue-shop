@@ -21,39 +21,45 @@ const routes = [
   },
   {
     path: '/dashboard',
-    component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "adminDashboard" */ '../views/Admin/Dashboard.vue'),
     children: [
       {
         path: 'products',
-        component: () => import(/* webpackChunkName: "products" */ '../views/Products.vue'),
+        component: () => import(/* webpackChunkName: "adminProducts" */ '../views/Admin/Products.vue'),
       },
       {
         path: 'orders',
-        component: () => import(/* webpackChunkName: "orders" */ '../views/Orders.vue'),
+        component: () => import(/* webpackChunkName: "adminOrders" */ '../views/Admin/Orders.vue'),
       },
       {
         path: 'coupons',
-        component: () => import(/* webpackChunkName: "orders" */ '../views/Coupons.vue'),
+        component: () => import(/* webpackChunkName: "adminOrders" */ '../views/Admin/Coupons.vue'),
       },
     ],
   },
   {
     path: '/user',
-    component: () => import(/* webpackChunkName: "user" */ '../views/Userboard.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/User/Userboard.vue'),
     children: [
       {
         path: 'cart',
-        component: () => import(/* webpackChunkName: "cart" */ '../views/UserCart.vue'),
-      },
-      {
-        path: 'product/:productId',
-        component: () => import(/* webpackChunkName: "product" */ '../views/UserProduct.vue'),
+        component: () => import(/* webpackChunkName: "userCart" */ '../views/User/UserCart.vue'),
       },
       {
         path: 'checkout/:orderId',
-        component: () => import('../views/UserCheckout.vue'),
+        component: () => import(/* webpackChunkName: "userCheckout" */'../views/User/UserCheckout.vue'),
       },
     ],
+  },
+  {
+    path: '/product/:productId',
+    name: 'productShow',
+    component: () => import(/* webpackChunkName: "productShow" */ '../views/ProductShow.vue'),
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: () => import(/* webpackChunkName: "products" */ '../views/Product.vue'),
   },
 ];
 
