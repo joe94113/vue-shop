@@ -21,6 +21,7 @@ export default defineStore('cartStore', {
                 // console.log('addcart:', response);
                 status.cartLoadingItem = '';
                 status.pushMessage({ title: '加入購物車成功', style: 'success' });
+                this.getCart();
             });
         },
         removeCartItem(id) {
