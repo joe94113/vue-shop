@@ -10,10 +10,7 @@ provide('emitter', emitter);
 <template>
   <div class="min-h-screen bg-gray-100">
     <header class="fixed-top">
-      <div v-if="$slots.header">
-        <slot name="header" />
-      </div>
-      <HeaderMenu v-else />
+      <HeaderMenu></HeaderMenu>
     </header>
 
     <main>

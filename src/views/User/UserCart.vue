@@ -194,7 +194,6 @@ export default {
       },
     };
   },
-  inject: ['httpMessageState'],
   computed: {
     ...mapState(cartStore, ['cart']),
     ...mapState(statusStore, ['isLoading', 'cartLoadingItem']),
@@ -213,7 +212,6 @@ export default {
       };
       this.isLoading = true;
       this.$http.post(url, { data: coupon }).then((response) => {
-        // this.httpMessageState(response, '加入優惠卷');
         this.pushMessage({ title: '加入優惠卷', style: 'success' });
         this.getCart();
         this.isLoading = false;

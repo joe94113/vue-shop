@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia';
+import statusStore from '@/stores/statusStore';
 import ProductModal from '@/components/ProductModal.vue';
 import DelModal from '@/components/DelModal.vue';
 import Pagination from '@/components/Pagination.vue';
@@ -71,8 +73,8 @@ export default {
     DelModal,
     Pagination,
   },
-  inject: ['httpMessageState'],
   methods: {
+    ...mapActions(statusStore, ['pushMessage']),
     getProducts(page = 1) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products/?page=${page}`;
       this.isLoading = true;
@@ -117,7 +119,7 @@ export default {
           delComponent.hideModal();
           this.getProducts();
           this.isLoading = false;
-          this.httpMessageState(response, '刪除成功');
+          this.pushMessage({ title: '刪除成功', style: 'success' });
           // console.log(data);
         })
         .catch((err) => {
@@ -141,7 +143,7 @@ export default {
           this.isLoading = false;
           productComponent.hideModal();
           this.getProducts();
-          this.httpMessageState(response);
+          this.pushMessage({ title: '產品更新成功', style: 'success' });
         })
         .catch((err) => {
           console.log(err);

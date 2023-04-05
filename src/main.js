@@ -5,6 +5,7 @@ import VueAxios from 'vue-axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap';
 import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate';
 import AllRules from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';

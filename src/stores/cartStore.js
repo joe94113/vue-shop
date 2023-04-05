@@ -2,7 +2,7 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 import statusStore from './statusStore';
 
-const status = statusStore();
+// const status = statusStore()
 
 export default defineStore('cartStore', {
     state: () => ({
@@ -10,6 +10,7 @@ export default defineStore('cartStore', {
     }),
     actions: {
         addCart(id, qty = 1) {
+            const status = statusStore();
             const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
             const cart = {
                 product_id: id,
@@ -23,6 +24,7 @@ export default defineStore('cartStore', {
             });
         },
         removeCartItem(id) {
+            const status = statusStore();
             status.cartLoadingItem = id;
             const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${id}`;
             status.isLoading = true;
@@ -34,6 +36,7 @@ export default defineStore('cartStore', {
             });
         },
         getCart() {
+            const status = statusStore();
             const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
             status.isLoading = true;
             axios.get(url).then((response) => {
@@ -43,6 +46,7 @@ export default defineStore('cartStore', {
             });
         },
         updateCart(item) {
+            const status = statusStore();
             const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
             status.isLoading = true;
             status.cartLoadingItem = item.id;

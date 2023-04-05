@@ -65,6 +65,8 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia';
+import statusStore from '@/stores/statusStore';
 import DelModal from '@/components/DelModal.vue';
 import OrderModal from '@/components/OrderModal.vue';
 import Pagination from '@/components/Pagination.vue';
@@ -85,8 +87,8 @@ export default {
     DelModal,
     OrderModal,
   },
-  inject: ['httpMessageState'],
   methods: {
+    ...mapActions(statusStore, ['pushMessage']),
     getOrders(currentPage = 1) {
       this.currentPage = currentPage;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${currentPage}`;
@@ -118,7 +120,7 @@ export default {
       this.$http.put(api, { data: paid }).then((response) => {
         this.isLoading = false;
         this.getOrders(this.currentPage);
-        this.httpMessageState(response, '更新付款狀態');
+        this.pushMessage({ title: '更新付款狀態', style: 'success' });
       });
     },
     delOrder() {

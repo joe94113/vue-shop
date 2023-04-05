@@ -17,14 +17,34 @@
           ><img height="30" src="/vue-shop/logo.png" alt=""
         /></router-link>
         <ul class="list-unstyled m-0 d-flex order-1 order-lg-3">
-          <li class="me-3">
-            <router-link class="navbar-brand" to="/user/cart"
-              ><font-awesome-icon :icon="['fass', 'cart-shopping']" /><span
-                style="color: aquamarine"
-                class="badge"
-                >12</span
-              ></router-link
+          <li class="nav-item dropdown">
+            <a
+              id="navbarDropdownMenuLink"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              type="button"
             >
+              <font-awesome-icon :icon="['fass', 'cart-shopping']" />
+              <span style="color: aquamarine" class="badge">{{
+                cart.carts ? cart.carts.length : 0
+              }}</span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li v-for="item in cart.carts" :key="item.id">
+                <router-link
+                  class="dropdown-item"
+                  :to="`/product/${item.product.id}`"
+                  active-class="active"
+                  >{{ item.product.title }} 數量: {{ item.qty }}</router-link
+                >
+              </li>
+              <li>
+                <router-link class="dropdown-item" to="/user/cart" active-class="active"
+                  >查看購物車</router-link
+                >
+              </li>
+            </ul>
           </li>
         </ul>
         <div class="collapse navbar-collapse order-2" id="menuContent">
@@ -46,3 +66,11 @@
     </nav>
   </div>
 </template>
+<script setup>
+import cartStore from '@/stores/cartStore';
+import { storeToRefs } from 'pinia';
+
+const useCartStore = cartStore();
+useCartStore.getCart();
+const { cart } = storeToRefs(useCartStore);
+</script>

@@ -31,17 +31,11 @@
 
 <script>
 import { EffectFade } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/vue';
 import ShopBlade from '@/layouts/ShopBlade.vue';
-
-import 'swiper/scss';
-import 'swiper/scss/effect-fade';
 
 export default {
   name: 'HomeView',
   components: {
-    Swiper,
-    SwiperSlide,
     ShopBlade,
   },
   created() {

@@ -30,7 +30,9 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia';
 import ShopBlade from '@/layouts/ShopBlade.vue';
+import statusStore from '@/stores/statusStore';
 
 export default {
   data() {
@@ -39,11 +41,11 @@ export default {
       id: '',
     };
   },
-  inject: ['httpMessageState'],
   components: {
     ShopBlade,
   },
   methods: {
+    ...mapActions(statusStore, ['pushMessage']),
     getProduct() {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${this.id}`;
       this.isLoading = true;
@@ -64,7 +66,7 @@ export default {
       this.isLoading = true;
       this.$http.post(url, { data: cart }).then((response) => {
         this.isLoading = false;
-        this.httpMessageState(response, '加入購物車');
+        this.pushMessage({ title: '加入購物車', style: 'success' });
         this.$router.push('/products');
       });
     },

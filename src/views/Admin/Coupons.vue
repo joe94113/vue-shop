@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia';
+import statusStore from '@/stores/statusStore';
 import CouponModel from '@/components/CouponModel.vue';
 import Pagination from '@/components/Pagination.vue';
 import DelModal from '@/components/DelModal.vue';
@@ -72,8 +74,8 @@ export default {
     Pagination,
     DelModal,
   },
-  inject: ['httpMessageState'],
   methods: {
+    ...mapActions(statusStore, ['pushMessage']),
     getCoupons(page = 1) {
       this.isLoading = true;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupons?page=${page}`;
@@ -106,7 +108,7 @@ export default {
         const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
         this.$http.post(url, { data: tempCoupon }).then((response) => {
           //   console.log(response, tempCoupon);
-          this.httpMessageState(response, '新增優惠券');
+          this.pushMessage({ title: '新增優惠券', style: 'success' });
           this.getCoupons();
           this.$refs.couponModal.hideModal();
         });
@@ -114,7 +116,7 @@ export default {
         const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
         this.$http.put(url, { data: this.tempCoupon }).then((response) => {
           //   console.log(response);
-          this.httpMessageState(response, '新增優惠券');
+          this.pushMessage({ title: '新增優惠券', style: 'success' });
           this.getCoupons();
           this.$refs.couponModal.hideModal();
         });
@@ -125,7 +127,7 @@ export default {
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
         // console.log(response, this.tempCoupon);
-        this.httpMessageState(response, '刪除優惠券');
+        this.pushMessage({ title: '刪除優惠券', style: 'success' });
         const delComponent = this.$refs.delModal;
         delComponent.hideModal();
         this.getCoupons();
